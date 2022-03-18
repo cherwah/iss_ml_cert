@@ -94,7 +94,7 @@ def make_dataframe_from(ref_data_df, data_np, label):
 
   # copied the label over
   data_df[label] = ref_data_df[label]
-  return data_df[label]
+  return data_df
 
 
 '''
@@ -141,7 +141,7 @@ def main():
   # convert our scaled numpy data back into a dataframe for plotting distributions
   scaled_data_df = make_dataframe_from(
     ref_data_df=data_df, 
-    data_df=scaled_data_np, 
+    data_np=scaled_data_np, 
     label='Cultivar'
   )
 
