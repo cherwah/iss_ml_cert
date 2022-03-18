@@ -151,7 +151,7 @@ def main():
     label='Cultivar'
   )
 
-  # save distro after scaling features
+  # save distro again after scaling features
   show_distro(
     feature_names=feature_names, 
     data_df=scaled_data_df, 
@@ -168,6 +168,8 @@ def main():
   # total explained variance ratios by all 4 principal components
   print("Total Explained Variance =", pca.explained_variance_ratio_.sum())
 
+  # determine the no. of principal components required to capture
+  # at least 85% of the information of the original dataset
   min_pc = min_components(data_np=scaled_data_np, percent=0.85)
   print("Min principal components =", min_pc)
 
