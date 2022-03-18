@@ -5,12 +5,12 @@ import seaborn as sb
 import math
 import os
 from sklearn.decomposition import PCA
+from sklearn.metrics import explained_variance_score
 from sklearn.preprocessing import StandardScaler
 
-
 '''
-read dataset and return as a pandas dataset
-returns None if file is not found
+Read dataset and return as a Pandas dataset.
+Returns None if file is not found.
 '''
 def read_data(path):
   try:
@@ -20,15 +20,19 @@ def read_data(path):
 
 
 '''
-accepts an array of feature-names to plot on provided data
+Accepts an array of feature-names to plot on provided dataset
+The dataset must be a Pandas DataFrame.
+
+Documentations for a kdeplot can be found here: 
+- https://seaborn.pydata.org/generated/seaborn.kdeplot.html
 '''
-def show_distro(feature_names, data, save_to=None):
+def show_distro(feature_names, data_df, save_to=None, show_win=False):
   num_features = len(feature_names)
   rows = math.ceil(num_features / 2)  # round-up
   cols = 2  # limit to only two columns
 
   # looks nicer with this style
-  sb.set(style='darkgrid')  
+  sb.set_style(style="darkgrid")
 
   # create a grid of plots of nrows and ncols
   _, ax = plt.subplots(nrows=rows, ncols=cols, figsize=(12, 8))
@@ -38,9 +42,14 @@ def show_distro(feature_names, data, save_to=None):
     for j in range(cols):  # columns
       which = i * cols + j  # e.g. 1*2+0 gives us the 3rd elem in the list
       if which < num_features:
-        sb.kdeplot(data=data, x=feature_names[which],
-          hue='Cultivar', ax=ax[i, j])
-
+        sb.kdeplot(
+          data=data_df, 
+          color="b",
+          x=feature_names[which], 
+          hue="Cultivar", # 'hue' allows us to differentiate by type/label
+          ax=ax[i, j]
+        )  
+                  
   # save the plot into an image if save_to parameter is set
   # note that savefig() must come before show() or it would 
   # yield an empty image
@@ -49,63 +58,98 @@ def show_distro(feature_names, data, save_to=None):
 
   # use block=True as parameter so that the plot window remains 
   # on the screen even after the program ends
-  plt.show(block=True)  
+  if show_win is True:
+    plt.show(block=True)  
   
 
 '''
 Perform feature scaling / standardization.
+Expects provided data to be a NumPy array.
 Returns scaled dataset.
 '''
-def scale_features(data):
-  pass
+def scale_features(data_np):
+  return StandardScaler().fit_transform(X=data_np)
 
 
 '''
 Performs principal component analysis on data. The features for the 
 provided dataset must already be scaled.
-Returns new features after applying PCA.
+Expects input data to be a NumPy array.
+Returns the pca object and the newly-generated features 
 '''
-def apply_pca(n_pca_components, data):
-  pass
+def apply_pca(n_components, data_np):
+  pca = PCA(n_components=n_components)
+  return pca, pca.fit_transform(X=data_np)
 
 
 '''
 Determines the minimum number of principal components to catpure
 85% of the original information in our dataset.
 '''
-def min_components(data):
+def min_components(data_np):
   pass
 
 
 '''
-entry point for our program
+Entry point for our program
 '''
 def main():
   # begin by reading in our dataset
-  data = read_data("dataset/wine.csv")
-  if data is None:
+  data_df = read_data("dataset/wine.csv")
+  if data_df is None:
     print("File is not found.")
     return 
 
   # plot distributions for these feature-names
   feature_names = [
-    'Alcalinity of ash', 
-    'Flavanoids',
-    'Hue',
-    'Proline'
+    "Alcalinity of ash", 
+    "Flavanoids",
+    "Hue",
+    "Proline"
   ]
 
-  # save distro before scaling features
-  show_distro(feature_names, data, "distro_no_scaled.png")
+  # save distro before scaling features  
+  show_distro(
+    feature_names=feature_names, 
+    data_df=data_df, 
+    save_to="distro_no_scaled.png"
+  )
 
-  # scale the features of our dataset
+  # transform dataframe into numpy array.
+  # use all columns except 'Cultivar' (our label) since 
+  # there is no need to scale our label.
+  data_np = data_df.loc[:, "Alcohol":].values
+
+  # scale the features in the numpy array
+  scaled_data_np = scale_features(data_np=data_np)
+ 
+  # construct dataframe from scaled data
+  # using all feature names but 'Cultivar'
+  scaled_data_df = pd.DataFrame(
+    data=scaled_data_np,
+    columns=data_df.columns.drop("Cultivar")
+  )
+  scaled_data_df["Cultivar"] = data_df["Cultivar"]
+
+  # save distro after scaling features
+  show_distro(
+    feature_names=feature_names, 
+    data_df=scaled_data_df, 
+    save_to="distro_scaled.png"
+  )
+  
+  pca, _ = apply_pca(n_components=4, data_np=scaled_data_np)
+
+  # explained variance ratios capturd by each of the 4 principal components
+  print(pca.explained_variance_ratio_)
+  
+  # total explained variance ratios by all 4 principal components
+  print(pca.explained_variance_ratio_.sum())
 
 
-  pass
 
 
-'''
-running via python feature_extraction_wshop_soln.py
-'''
+
+#running via python feature_extraction_wshop_soln.py
 if __name__ == "__main__":
   main()
