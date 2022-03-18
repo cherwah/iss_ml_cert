@@ -3,9 +3,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sb
 import math
-import os
 from sklearn.decomposition import PCA
-from sklearn.metrics import explained_variance_score
 from sklearn.preprocessing import StandardScaler
 
 '''
@@ -71,8 +69,8 @@ def scale_features(data_np):
 
 
 '''
-Performs principal component analysis on data. The features for the 
-provided dataset must already be scaled.
+Performs PCA on data. The features for the provided dataset 
+must already be scaled.
 Expects input data to be a NumPy array.
 Returns the pca object and the newly-generated features 
 '''
@@ -92,7 +90,7 @@ def make_dataframe_from(ref_data_df, data_np, label):
     columns=ref_data_df.columns.drop(label) # want all columns but the label
   )
 
-  # copied the label over
+  # copied the label over to new dataframe
   data_df[label] = ref_data_df[label]
   return data_df
 
@@ -108,7 +106,7 @@ def min_components(data_np, percent):
   # +1 to include the last column
   for min in range(1, data_np.shape[1] + 1):
     pca = PCA(n_components=min)
-    pc = pca.fit(data_np)
+    pca.fit(data_np)  # did not transform (i.e. generate new features)
     if pca.explained_variance_ratio_.sum() >= 0.85:
       return min
     
