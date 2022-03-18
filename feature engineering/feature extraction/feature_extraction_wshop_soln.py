@@ -44,7 +44,6 @@ def show_distro(feature_names, data_df, save_to=None, show_win=False):
       if which < num_features:
         sb.kdeplot(
           data=data_df, 
-          color="b",
           x=feature_names[which], 
           hue="Cultivar", # 'hue' allows us to differentiate by type/label
           ax=ax[i, j]
@@ -80,6 +79,22 @@ Returns the pca object and the newly-generated features
 def apply_pca(n_components, data_np):
   pca = PCA(n_components=n_components)
   return pca, pca.fit_transform(X=data_np)
+
+
+'''
+Construct a Pandas Dataframe from 'data_np' while using 'ref_data_df'
+as a reference (e.g. feature_names and label)
+Assumes the label is not found in 'data_np'.
+'''
+def make_dataframe_from(ref_data_df, data_np, label):   
+  data_df = pd.DataFrame(
+    data=data_np, # columns of data to fit into reference dataframe
+    columns=ref_data_df.columns.drop(label) # want all columns but the label
+  )
+
+  # copied the label over
+  data_df[label] = ref_data_df[label]
+  return data_df[label]
 
 
 '''
@@ -122,14 +137,13 @@ def main():
 
   # scale the features in the numpy array
   scaled_data_np = scale_features(data_np=data_np)
- 
-  # construct dataframe from scaled data
-  # using all feature names but 'Cultivar'
-  scaled_data_df = pd.DataFrame(
-    data=scaled_data_np,
-    columns=data_df.columns.drop("Cultivar")
+
+  # convert our scaled numpy data back into a dataframe for plotting distributions
+  scaled_data_df = make_dataframe_from(
+    ref_data_df=data_df, 
+    data_df=scaled_data_np, 
+    label='Cultivar'
   )
-  scaled_data_df["Cultivar"] = data_df["Cultivar"]
 
   # save distro after scaling features
   show_distro(
