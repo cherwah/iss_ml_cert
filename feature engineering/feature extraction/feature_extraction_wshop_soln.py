@@ -98,12 +98,20 @@ def make_dataframe_from(ref_data_df, data_np, label):
 
 
 '''
-Determines the minimum number of principal components to catpure
-85% of the original information in our dataset.
+Determines the minimum number of principal components to capture
+X% ('percent' parameter) of the original information in our dataset.
 '''
-def min_components(data_np):
-  pass
+def min_components(data_np, percent):
+  min = 1
 
+  # shape[1] gives us the number of columns in our dataset
+  # +1 to include the last column
+  for min in range(1, data_np.shape[1] + 1):
+    pca = PCA(n_components=min)
+    pc = pca.fit(data_np)
+    if pca.explained_variance_ratio_.sum() >= 0.85:
+      return min
+    
 
 '''
 Entry point for our program
@@ -152,16 +160,18 @@ def main():
     save_to="distro_scaled.png"
   )
   
+  # no need for the new features here, hence the second return
+  # value is a '_'
   pca, _ = apply_pca(n_components=4, data_np=scaled_data_np)
 
   # explained variance ratios capturd by each of the 4 principal components
-  print(pca.explained_variance_ratio_)
+  print("Explained Variance Ratios =", pca.explained_variance_ratio_)
   
   # total explained variance ratios by all 4 principal components
-  print(pca.explained_variance_ratio_.sum())
+  print("Total Explained Variance =", pca.explained_variance_ratio_.sum())
 
-
-
+  min_pc = min_components(data_np=scaled_data_np, percent=0.85)
+  print("Min principal components =", min_pc)
 
 
 #running via python feature_extraction_wshop_soln.py
