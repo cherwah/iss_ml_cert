@@ -7,3 +7,5 @@ neural networks/cnn/.DS_Store
 distro_no_scaled.png
 distro_scaled.png
 feature engineering/.DS_Store
+pairplot.png
+wine_corr_heat.png

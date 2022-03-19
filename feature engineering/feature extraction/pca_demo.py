@@ -29,6 +29,8 @@ x_scaled = scaler.fit_transform(x)
 pca = PCA(n_components=2)
 
 # returns a NumPy array of size 'n_components'
+# 'pc' contains the new features generated applying
+# PCA on the dataset
 pc = pca.fit_transform(x_scaled)
 
 for species in np.unique(y):

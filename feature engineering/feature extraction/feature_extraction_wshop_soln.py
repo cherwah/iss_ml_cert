@@ -174,6 +174,6 @@ def main():
   print("Min principal components =", min_pc)
 
 
-#running via python feature_extraction_wshop_soln.py
+# running via "python feature_extraction_wshop_soln.py"
 if __name__ == "__main__":
   main()
