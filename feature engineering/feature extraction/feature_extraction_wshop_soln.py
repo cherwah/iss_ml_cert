@@ -115,7 +115,7 @@ def min_components(data_np, percent):
 Entry point for our program
 '''
 def main():
-  # begin by reading in our dataset
+  # reading in our dataset
   data_df = read_data("dataset/wine.csv")
   if data_df is None:
     print("File is not found.")
