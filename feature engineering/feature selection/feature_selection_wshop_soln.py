@@ -89,17 +89,19 @@ def move_label_to_last(df, label):
   return df.reindex(columns=new_order, index=new_order)
   
 
-
 '''
 Performs feature-selection. It selects the best features by looking
 for features that correlates strongly w.r.t. the label. It also
 removes redunduncy by eliminating peers that are strongly-correlated.
 '''
 def best_features(corr_mat, label, label_limit, peers_limit):
+  # only consider features that are high-correlated with our label
   candidates_series = features_by_cond(corr_mat[label], 
     less_than=-label_limit, more_than=label_limit)
   print(candidates_series)
 
+  # shrink original correlation matrix to only consider
+  # the features that are highly-correlated with our label
   candidates_df = shrink_corr_mat(corr_mat, 
     keep_feature_names=candidates_series.index)
   print(candidates_df)
@@ -107,8 +109,11 @@ def best_features(corr_mat, label, label_limit, peers_limit):
   # re-order the columns for easier processing
   candidates_df = move_label_to_last(candidates_df, label)
 
-  accept = []
-  while len(candidates_df) > 1:
+  # use this to store the best features so far
+  accept = [] 
+
+  # iteratively compares features against peers and the label
+  while len(candidates_df) > 1:  # stop when left with our label
     # inspect each feature in turn
     feature = candidates_df.columns[0]
 
@@ -117,8 +122,10 @@ def best_features(corr_mat, label, label_limit, peers_limit):
     print('series =\n', series, '\n', sep='')
 
     # look for other features that are highly-correlated with 
-    # the current 'feature'
-    high_corr = features_by_cond(series, less_than=None, more_than=0.6)
+    # the current 'feature'. only consider positively correlated 
+    # to remove redundancy.
+    high_corr = features_by_cond(series, 
+      less_than=None, more_than=peers_limit)
     print('high_corr =\n', high_corr, '\n', sep='')
 
     # extract the pearson correlation values of each of these 
@@ -159,8 +166,8 @@ def main():
   corr_mat = df.corr()
 
   # generate plots
-  # make_pairplot(data_df=df, save_to="pairplot.png")
-  # make_heatmap(corr_mat=corr_mat, save_to="wine_corr_heat.png")
+  make_pairplot(data_df=df, save_to="pairplot.png")
+  make_heatmap(corr_mat=corr_mat, save_to="wine_corr_heat.png")
 
   features = best_features(
     corr_mat=corr_mat, 
