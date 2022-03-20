@@ -38,7 +38,7 @@ skip = []
 accept = []
 for feature in candidates_df.columns:
   if feature not in skip and feature not in accept:
-		# get all features w.r.t. 'feature'
+		# get other features w.r.t. 'feature'
     series = candidates_df[feature]
     print('series =\n', series, '\n', sep='')
 

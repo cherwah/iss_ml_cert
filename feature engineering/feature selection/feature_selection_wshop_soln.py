@@ -43,57 +43,106 @@ def make_heatmap(corr_mat, save_to, font_scale=1.2, annot_font_size=18):
 
 
 '''
-Get feature-names based on input series 'bool_rows'
-that contains rows of true/false values.
+Returns a subset of a series by condition.
 '''
-def get_features(corr_mat, target, less_than, more_than):
-  series = corr_mat[target]
-
+def features_by_cond(series, less_than, more_than):
   # get back rows of True and False values based on specified condition
   # any rows that met the condition will be True; the rest will be False
   if less_than is not None and more_than is not None:
     # e.g. series[(series < -0.5) | (series > 0.5)]
-    bool_rows = series[(series < less_than) | (series > more_than)]
+    series = series[(series < less_than) | (series > more_than)]
   elif less_than is not None:
     # e.g. series[series < -0.5)]
-    bool_rows = series[(series < less_than)]
+    series = series[(series < less_than)]
   elif more_than is not None:
     # e.g. series[series > 0.5]]
-    bool_rows = series[(series > more_than)]
+    series = series[(series > more_than)]
   else:
     return None
 
-  series = series[bool_rows]  # Pandas series
-  return series.index         # get feature-names
+  return series
 
 
 '''
 Make a new Pandas dataframe from an existing dataframe, based on 
 rows of true/false values for conditional selection.
 '''
-def make_dataframe_from(corr_mat, target, bool_rows, rm_target=False):
-  series = corr_mat[target]      # get column that corresponds to the target  
-  series = series[bool_rows]    # extract values of corresponding True rows
-  feature_names = series.index  # get the index-values of the Pandas series
+def shrink_corr_mat(corr_mat, keep_feature_names):
+  print(keep_feature_names)
 
-  df = pd.DataFrame() # create empty Pandas dataframe
-  df[feature_names] = corr_mat[feature_names] # copy values over
+  shrinked_mat = corr_mat.loc[keep_feature_names, keep_feature_names]
 
-  if rm_target is True:
-    df.drop(columns=[target], index=[target], inplace=True)
-
-  return df
+  print(shrinked_mat)
+  return shrinked_mat
 
 
-def best_features(corr_mat, label, label_limit, peers_limit):
-  skip, accept = [], []
+'''
+Re-order the columns of a dataframe such that the label
+occupies the last column and last index in the dataframe.
+'''
+def move_label_to_last(df, label):
+  new_order = list(df.columns)
+  new_order.remove(label) # remove the label from the columns
+  new_order.append(label) # move label to the last column
   
-  cond = 
-  candidates_df = make_dataframe_from(corr_mat=corr_mat,
-    target=label, ))
-  for feature 
+  # re-index the columns and index within the dataframe
+  return df.reindex(columns=new_order, index=new_order)
+  
 
 
+'''
+Performs feature-selection. It selects the best features by looking
+for features that correlates strongly w.r.t. the label. It also
+removes redunduncy by eliminating peers that are strongly-correlated.
+'''
+def best_features(corr_mat, label, label_limit, peers_limit):
+  candidates_series = features_by_cond(corr_mat[label], 
+    less_than=-label_limit, more_than=label_limit)
+  print(candidates_series)
+
+  candidates_df = shrink_corr_mat(corr_mat, 
+    keep_feature_names=candidates_series.index)
+  print(candidates_df)
+
+  # re-order the columns for easier processing
+  candidates_df = move_label_to_last(candidates_df, label)
+
+  accept = []
+  while len(candidates_df) > 1:
+    # inspect each feature in turn
+    feature = candidates_df.columns[0]
+
+    # get all peers of these feature, except the label
+    series = candidates_df.loc[feature].drop(label)
+    print('series =\n', series, '\n', sep='')
+
+    # look for other features that are highly-correlated with 
+    # the current 'feature'
+    high_corr = features_by_cond(series, less_than=None, more_than=0.6)
+    print('high_corr =\n', high_corr, '\n', sep='')
+
+    # extract the pearson correlation values of each of these 
+    # highly-correlated features w.r.t. our label
+    alike = candidates_df.loc[high_corr.index, label]
+    print('alike =\n', alike, '\n', sep='')
+
+    # idxmax() to get the feature that is most correlated with 
+    # our label. abs() to absolute the values because 
+    # the features could be either positively or negatively 
+    # correlated to our label
+    top = alike.abs().idxmax()  # row-label (feature-name) of max-value
+    accept.append(top)
+
+    # place index-names into an array, so that we can use them
+    # as parameters to the drop() function
+    alike = list(alike.index) 
+
+    # done with feature, remove feature from 'candidates_df',
+    # this allows our candidates to be smaller each time
+    candidates_df.drop(columns=alike, index=alike, inplace=True)
+
+  # returns best features in the    
+  return accept
 
   
 '''
@@ -110,13 +159,16 @@ def main():
   corr_mat = df.corr()
 
   # generate plots
-  make_pairplot(data_df=df, save_to="pairplot.png")
-  make_heatmap(corr_mat=corr_mat, save_to="wine_corr_heat.png")
+  # make_pairplot(data_df=df, save_to="pairplot.png")
+  # make_heatmap(corr_mat=corr_mat, save_to="wine_corr_heat.png")
 
-  features = best_features(corr_mat=corr_mat, label='Cultivar',
-    label_limit=0.5, peers_limit=0.6)
+  features = best_features(
+    corr_mat=corr_mat, 
+    label='Cultivar',
+    label_limit=0.5, 
+    peers_limit=0.6)
+
   print("best features =", features)
-
 
 
 # running via "python feature_selection_wshop_soln.py"
