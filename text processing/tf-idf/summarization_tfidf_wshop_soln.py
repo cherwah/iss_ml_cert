@@ -7,6 +7,8 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 
 
 '''
+Ensure that all NTLK resources have been downloaded into
+the local machine.
 '''
 def prep_nltk_data():
     try:
@@ -86,7 +88,9 @@ def gen_features_as_dataframe(docs):
         index=df_index, columns=df_columns)
 
 
-# get documents with large TF-IDF values
+'''
+Get top N documents with the largest TF-IDF values.
+'''
 def get_top_tfidf_sums(df, n):
     # sum up the TF-IDF values for each document
     # axis=1 because the columns in our dataframe
@@ -98,10 +102,14 @@ def get_top_tfidf_sums(df, n):
     # TF-IDF values
     sorted_series = tfidf_sum_by_docs.sort_values(ascending=False)
     
-    # get the top N "documents"
+    # only returns the top N "documents"
     return sorted_series.head(n)
 
 
+'''
+Print out the sentences in the original document with the 
+highest TF-IDF values.
+'''
 def print_summary(top_series, doc):
     # remove the prefix 'doc' from indexes such as
     # [doc10, doc24, doc11, ..., doc22]
@@ -123,12 +131,11 @@ def print_summary(top_series, doc):
         print(sentences[i] + "\n")
 
 
-
 '''
-Entry point of our program
+Entry point of our program.
 '''
 def main():
-    # ensure all nltk resources are in local machine
+    # ensure all NLTK resources are available
     prep_nltk_data()
 
     # reading in our dataset
