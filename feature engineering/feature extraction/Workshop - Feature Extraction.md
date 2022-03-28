@@ -35,7 +35,6 @@ The dataset provided is called ‘wine.csv’ and the description of the data ca
 </br>
 
 - The plots would look like this.
-  
   ![distro_no_scaled](https://github.com/cherwah/iss_ml_cert/blob/main/images/distro_no_scaled.png?raw=true)
 
 </br>
@@ -71,7 +70,6 @@ The dataset provided is called ‘wine.csv’ and the description of the data ca
 </br>
 
 - Your plots should now look like this.
-
   ![distro_scaled](https://github.com/cherwah/iss_ml_cert/blob/main/images/distro_scaled.png?raw=true)
 
   > Notice the change in values on the x-axes for the features.
@@ -79,8 +77,6 @@ The dataset provided is called ‘wine.csv’ and the description of the data ca
 </br>
 
 - Select all columns, **except** ***Cultivar***, to perform PCA on.
-  
-  </br>
 
   > Note that ***Cultivar*** is a label (or a class), hence we do not use it when computing our principal components.
 
@@ -120,7 +116,7 @@ The dataset provided is called ‘wine.csv’ and the description of the data ca
 </br>
 
 - A sample output is shown below.
-
+  
   > Min principal components = 6
 
 </br>
