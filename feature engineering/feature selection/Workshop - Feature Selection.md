@@ -36,7 +36,7 @@ The dataset provided is called ‘wine.csv’ and the description of the data ca
 
 </br>
 
-- The Pair Plot is shown below.
+- The Pair Plot should look like this.
   ![pairplot](https://github.com/cherwah/iss_ml_cert/blob/main/images/pairplot.png?raw=true)
 
 </br>
@@ -62,7 +62,7 @@ The dataset provided is called ‘wine.csv’ and the description of the data ca
 
 </br>
 
-- The Heat map would look like this.
+- The Heat map should look like this.
   ![heatmap](https://github.com/cherwah/iss_ml_cert/blob/main/images/wine_corr_heat.png?raw=true)
 
 </br>
