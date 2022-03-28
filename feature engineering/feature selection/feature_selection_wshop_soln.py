@@ -39,7 +39,7 @@ def make_heatmap(corr_mat, save_to, font_scale=1.2, annot_font_size=18):
       'size':annot_font_size  # font size for values
     })
 
-  plt.savefig("wine_corr_heat.png") # save to file
+  plt.savefig(save_to) # save to file
   plt.clf()
 
 
