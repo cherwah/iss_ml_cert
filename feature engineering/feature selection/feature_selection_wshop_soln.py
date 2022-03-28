@@ -9,6 +9,7 @@ Returns None if file is not found.
 '''
 def read_data(path):
   try:
+    # use Pandas to read in our CSV file
     return pd.read_csv(path)
   except FileNotFoundError:
     return None
@@ -157,27 +158,30 @@ Entry point for our program
 '''
 def main():
   # reading in our dataset
-  df = read_data("dataset/wine.csv")
+  df = read_data('dataset/wine.csv')
   if df is None:
-    print("File is not found.")
+    print('File is not found.')
     return
 
   # create correlation matrix
   corr_mat = df.corr()
 
   # generate plots
-  make_pairplot(data_df=df, save_to="pairplot.png")
-  make_heatmap(corr_mat=corr_mat, save_to="wine_corr_heat.png")
+  make_pairplot(data_df=df, save_to='pairplot.png')
+  make_heatmap(corr_mat=corr_mat, save_to='wine_corr_heat.png')
 
+  # feature selection - find the best features that correlates 
+  # to our label; use these features to train our model for
+  # future predictions
   features = best_features(
     corr_mat=corr_mat, 
     label='Cultivar',
     label_limit=0.5, 
     peers_limit=0.6)
 
-  print("best features =", features)
+  print('best features =', features)
 
 
 # running via "python feature_selection_wshop_soln.py"
-if __name__ == "__main__":
+if __name__ == '__main__':
   main()
