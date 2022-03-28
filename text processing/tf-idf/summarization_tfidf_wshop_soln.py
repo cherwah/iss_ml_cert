@@ -35,7 +35,7 @@ Remove stopwords from our document. The processed document
 is returned as a list of documents, where each sentence is 
 a document and the entire document is now our corpus.
 '''
-def remove_stopwords(doc):
+def preprocessing(doc):
     # use the English stopwords provided by NLTK
     stop_words = stopwords.words('english')
 
@@ -142,7 +142,7 @@ def main():
     doc = read_data('dataset/space_invaders.txt')
 
     # perform data processing
-    docs = remove_stopwords(doc)
+    docs = preprocessing(doc)
 
     # generate TF-IDF features
     df = gen_features_as_dataframe(docs)
