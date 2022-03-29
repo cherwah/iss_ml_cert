@@ -114,7 +114,7 @@ def best_features(corr_mat, label, label_limit, peers_limit):
   accept = [] 
 
   # iteratively compares features against peers and the label
-  while len(candidates_df) > 1:  # stop when left with our label
+  while len(candidates_df) > 1:  # stop when left with only our label
     # inspect each feature in turn
     feature = candidates_df.columns[0]
 

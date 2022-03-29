@@ -59,6 +59,10 @@ To practice using TF-IDF as a tool for text-featurization.
 
 </br>
 
+## Reminders
+
+</br>
+
 - For pre-processing, remember to remove stop-words from your corpus and stem each word in the text.
 
 </br>
