@@ -3,6 +3,11 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+'''
+Train a Neural Network to sum 3 numbers. Here, we are performing 
+a form of data regression, where we train our model to learn
+the correct sum of 3 numbers.
+'''
 
 '''
 Generate data for training and testing
@@ -26,7 +31,11 @@ Create our Neural Network model.
 '''
 def create_model(n_features):
   model = tf.keras.Sequential()
-  model.add(tf.keras.layers.Dense(50, input_shape=(n_features,), activation='relu'))
+
+  # can add multiple hidden-layers to our model
+  # our activation function is ReLU
+  model.add(tf.keras.layers.Dense(50, 
+    input_shape=(n_features,), activation='relu'))
   
   # output only has 1 neuron as that's the sum of our value for each row
   model.add(tf.keras.layers.Dense(1))
@@ -115,6 +124,7 @@ def main():
 
   # eyeball it
   show_diffs(model, x_test, y_test)
+
 
 # running via "python nn_add.py"
 if __name__ == "__main__":
