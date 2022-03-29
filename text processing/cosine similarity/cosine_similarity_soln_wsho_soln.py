@@ -148,7 +148,9 @@ def main():
 	df = make_similarity_dataframe(docs_similarity)
 	print(df)
 
-	# show quotes that match the query
+	# show quotes that match the query as we only have one query, 
+	# the first entry [0] corresponds to the cosine similarity scores 
+	# for our query string 
 	print_results(query, docs, df.iloc[0])
 
 

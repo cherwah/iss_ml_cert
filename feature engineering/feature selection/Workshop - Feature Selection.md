@@ -58,7 +58,8 @@ The dataset provided is called ‘wine.csv’ and the description of the data ca
   sns.heatmap(corr_mat, # correlation matrix
     annot=True,         # show pearson coefficients
     annot_kws={
-      'size':annot_font_size  # font size for pearson coefficients 
+      # font size for pearson coefficients 
+      'size':annot_font_size  
     })
   ```
 
@@ -75,7 +76,7 @@ The dataset provided is called ‘wine.csv’ and the description of the data ca
   2. Then, for each candidate X, look for peers Y within the rest of the candidates that are **greater than 0.6 positively-correlated** to X
   3. From (X + Y), select the feature that is either the **most negatively or positively correlated** to *Cultivar*
   4. Discard the rest in (X + Y) from the candidates pool
-  5. Re-iterate Step 2 until the canddiates pool is empty
+  5. Re-iterate Step 2 until the candidates pool is empty
 
 </br>
 

@@ -1,10 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
-import seaborn as sb
+import seaborn as sns
 import math
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
+
 
 '''
 Read dataset and return as a Pandas dataset.
@@ -30,7 +31,7 @@ def show_distro(feature_names, data_df, save_to=None, show_win=False):
   cols = 2  # limit to only two columns
 
   # looks nicer with this style
-  sb.set_style(style="darkgrid")
+  sns.set_style(style="darkgrid")
 
   # create a grid of plots of nrows and ncols
   _, ax = plt.subplots(nrows=rows, ncols=cols, figsize=(12, 8))
@@ -40,7 +41,7 @@ def show_distro(feature_names, data_df, save_to=None, show_win=False):
     for j in range(cols):  # columns
       which = i * cols + j  # e.g. 1*2+0 gives us the 3rd elem in the list
       if which < num_features:
-        sb.kdeplot(
+        sns.kdeplot(
           data=data_df, 
           x=feature_names[which], 
           hue="Cultivar", # 'hue' allows us to differentiate by type/label
