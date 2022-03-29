@@ -1,5 +1,7 @@
 # Workshop - Feature Selection
 
+</br>
+
 ## Objective
 
 To practice Feature Selection using Pearson Correlation
@@ -31,7 +33,7 @@ The dataset provided is called ‘wine.csv’ and the description of the data ca
   
   ```python  
   # generate pair plot
-  sns.pairplot(data_df)
+  sns.pairplot(df)
   ```
 
 </br>
