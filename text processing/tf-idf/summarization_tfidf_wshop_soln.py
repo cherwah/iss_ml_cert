@@ -11,11 +11,18 @@ Ensure that all NTLK resources have been downloaded into
 the local machine.
 '''
 def prep_nltk_data():
+    # check if sentence tokenizer is available
     try:
-       nltk.data.find('tokenizers/punkt')
+        nltk.data.find('tokenizers/punkt')
     except LookupError:
         nltk.download('punkt')
 
+    # check if the set of stopwords is available
+    try:
+        nltk.data.find('corpora/stopwords')
+    except LookupError:
+        nltk.download('stopwords')
+    
 
 '''
 Read our text file.
@@ -127,8 +134,9 @@ def print_summary(top_series, doc):
     # in the order that they appear in the original
     # document
     for i in sorted_num_only:
-        print('[Line {}]'.format(i))
-        print(sentences[i] + "\n")
+        # due to zero-based indicing, our i starts from 0.
+        # hence, our line numbering should add 1.
+        print('[Line {}] - {}\n'.format(i+1, sentences[i]))
 
 
 '''

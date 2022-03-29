@@ -12,10 +12,11 @@ Ensure that all NTLK resources have been downloaded into
 the local machine.
 '''
 def prep_nltk_data():
+    # check if the set of stopwords is available
     try:
-       nltk.data.find('tokenizers/punkt')
+        nltk.data.find('corpora/stopwords')
     except LookupError:
-        nltk.download('punkt')
+        nltk.download('stopwords')
 
 
 '''
@@ -48,9 +49,8 @@ def preprocessing(docs):
 
     # get a Stemmer to convert words to root forms
     stemmer = nltk.stem.PorterStemmer()
-    # sentences = nltk.tokenize.sent_tokenize(doc)
 
-    # to hold processed "documents"
+    # to hold already processed "documents"
     clean_docs = []
 
     # map every punctuation found in string.punctuation
