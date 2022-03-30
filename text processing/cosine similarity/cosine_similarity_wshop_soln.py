@@ -107,7 +107,7 @@ def print_results(query, docs, series):
 		pos = int(i[3:])	
 
 		# display the quotes and corresponding cosine similarity scores
-		print(docs[pos] + ' [score:', sorted_series[i], ']', sep='')
+		print('{} [score:{}]\n'.format(docs[pos], sorted_series[i]))
 
 
 '''
