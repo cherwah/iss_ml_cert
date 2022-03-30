@@ -20,11 +20,11 @@ To practice using Cosine Similarity as a tool for performing searching for relev
 
 - Given a query string, list out the most relevant quotes.
 
-  - First, treat each quote as a separate document and compute TFIDF values for each word in the 51 documents (remember to treat each line of quote as a separate document; your corpus is the 51 documents).
+  - First, treat each quote as a separate document and compute TF-IDF values for each word in the 51 documents (remember to treat each line of quote as a separate document; your corpus is the 51 documents).
   
   </br>
 
-  - Next, treat the query string as a separate document and compute its TFIDF values as well.
+  - Next, treat the query string as a separate document and compute its TF-IDF values as well.
   
   </br>
 
