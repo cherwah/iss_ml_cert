@@ -24,7 +24,7 @@ df = pd.DataFrame(
 	columns=columns) 
 print(df)
 
-# create
+# create the correlational matrix
 corr_mat = df.corr()
 print(corr_mat)
 
