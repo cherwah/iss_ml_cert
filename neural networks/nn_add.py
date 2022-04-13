@@ -5,7 +5,7 @@ import seaborn as sns
 
 '''
 Train a Neural Network to sum 3 numbers. Here, we are performing 
-a form of data regression, where we train our model to learn
+a form of data regression, where we train our model to learnquit
 the correct sum of 3 numbers.
 '''
 
